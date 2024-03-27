@@ -17,9 +17,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref, computed, watchEffect } from "vue";
+import { useStorage } from '@/hooks/storage'
+
 let title = ref("");
-let todos = ref([{ title: '学习Vue', done: false }])
+let todos = useStorage<Array<{ done: boolean, title: string }>>('todos', [])
+
+watchEffect(() => localStorage.setItem('todos', JSON.stringify(todos.value)))
 
 function addTodo() {
   todos.value.push({
